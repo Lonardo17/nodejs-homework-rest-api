@@ -5,7 +5,7 @@ const{validationAddedContact, validationUpdatedContact,  validateMongoId, valida
 
 const router = express.Router();
 
-const Controllers = require('../contacts-controllers');
+const Controllers = require('./contacts-controllers');
 
 router.get('/', Controllers.listContacts).post('/', validationAddedContact, Controllers.addContact);
 

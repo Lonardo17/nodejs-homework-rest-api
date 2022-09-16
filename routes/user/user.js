@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const { validationNewUser, validationLoginUser, validationSubscription } = require('./validation');
-const Controllers = require('../contacts-controllers')
+const Controllers = require('./user-controller')
+const tokenCheck = require('./token-check')
 
 router.post('./signup', validationNewUser, Controllers.signup);
 router.post('/login', validationLoginUser, Controllers.login);

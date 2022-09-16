@@ -1,8 +1,8 @@
 const { Schema, model } = require('mongoose');
-const bycrypt = require('bycryptjs');
-require('doenv').config();
+const bcrypt = require('bcryptjs');
+require('dotenv').config();
 
-const userSchema = new Shema(
+const userSchema = new Schema(
     {
         password: {
           type: String,
@@ -41,7 +41,7 @@ userSchema.pre('save', async function(next){
     next();
 })
 
-userShema.methods.isValidPassword = async function(password){
+userSchema.methods.isValidPassword = async function(password){
     return await bcrypt.compare(password, this.password);
 }
 

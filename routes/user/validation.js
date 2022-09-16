@@ -2,7 +2,7 @@ const Joi = require('joi');
 
 const validateNewUser = Joi.object({
     email: Joi.string().email().required(),
-    password: Joi.string().alphanum().min(5).max(25).required(),
+    password: Joi.string().min(5).max(25).required(),
     subscription: Joi.string()
       .valid(['starter', 'pro', 'business'])
       .optional(),
