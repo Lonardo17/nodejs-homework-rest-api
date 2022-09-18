@@ -4,7 +4,7 @@ const { validationNewUser, validationLoginUser, validationSubscription } = requi
 const Controllers = require('./user-controller')
 const tokenCheck = require('./token-check')
 
-router.post('./signup', validationNewUser, Controllers.signup);
+router.post('/signup', validationNewUser, Controllers.signup);
 router.post('/login', validationLoginUser, Controllers.login);
 router.post('/logout', tokenCheck, Controllers.logout);
 router.get('/current', tokenCheck, Controllers.current);

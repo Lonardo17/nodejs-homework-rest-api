@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose');
 const bcrypt = require('bcryptjs');
-require('dotenv').config();
+// require('dotenv').config();
 
 const userSchema = new Schema(
     {
@@ -15,10 +15,13 @@ const userSchema = new Schema(
         },
         subscription: {
           type: String,
-          enum: ["starter", "pro", "business"],
-          default: "starter"
+          enum: ['starter', 'pro', 'business'],
+          default: 'starter',
         },
-        token: String
+         token: {
+      type: String,
+      default: null,
+    },
       },
       {
         versionKey: false,
@@ -47,4 +50,4 @@ userSchema.methods.isValidPassword = async function(password){
 
 const User = model('user', userSchema);
 
-module.export = User;
+module.exports = User;

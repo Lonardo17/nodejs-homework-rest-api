@@ -2,7 +2,7 @@ const Users = require('../../models/user/user');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-const SECRET_KEY = process.env.SECRET_KEY;
+const SECRET_KEY = process.env.KEY_SECRET;
 
 const signup = async (req, res, next) => {
     try {

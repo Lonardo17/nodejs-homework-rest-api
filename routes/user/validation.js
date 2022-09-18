@@ -4,7 +4,8 @@ const validateNewUser = Joi.object({
     email: Joi.string().email().required(),
     password: Joi.string().min(5).max(25).required(),
     subscription: Joi.string()
-      .valid(['starter', 'pro', 'business'])
+      .valid('starter', 'pro', 'business')
+      .default('starter')
       .optional(),
   });
 
@@ -15,7 +16,7 @@ const validateLoginUser = Joi.object({
 
   const validateSubscriptionUpdate = Joi.object({
     subscription: Joi.string()
-      .valid(['starter', 'pro', 'business'])
+      .valid('starter', 'pro', 'business')
       .required(),
   });
   
