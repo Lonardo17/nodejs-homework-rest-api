@@ -1,5 +1,8 @@
 const Users = require('../../models/user/user');
 const jwt = require('jsonwebtoken');
+const fs = require('fs/promises');
+const path = require('path');
+const UploadAvatarService = require('../../services/upload-local');
 require('dotenv').config();
 
 const SECRET_KEY = process.env.KEY_SECRET;
@@ -15,7 +18,7 @@ const signup = async (req, res, next) => {
           message: 'This email is already in use.',
         });
     }
-        const { id, email, subscription } = await Users.createUser(req.body);
+        const { id, email, subscription, avatarURL} = await Users.createUser(req.body);
 
     return res.status(201).json({
       status: 'success',
@@ -24,6 +27,7 @@ const signup = async (req, res, next) => {
       user: {
         id,
         email,
+        avatarURL,
         subscription,
       },
     });
@@ -52,7 +56,7 @@ const login = async (req, res, next) => {
     await Users.updateToken(id, token);
 
     const {
-      _doc: { subscription },
+      _doc: { subscription, avatarURL },
     } = user;
 
     return res.json({
@@ -60,7 +64,7 @@ const login = async (req, res, next) => {
       code: 200,
       message: 'You have logged in.',
       token,
-      user: { email, subscription },
+      user: { email, avatarURL, subscription },
     });
   } catch (error) {
     next(error);
@@ -78,21 +82,13 @@ const logout = async (req, res, next) => {
 };
 
 const current = async (req, res, next) => {
-  try {
-    if (!req.user) {
-      return res.status(401).json({
-        status: 'error',
-        code: 401,
-        message: 'Not authorized.',
-      });
-    }
+   try {
+    const { email, avatarURL, subscription } = req.user;
 
-    const { email, subscription } = req.user;
-
-    return res.status(200).json({
+    return res.json({
       status: 'success',
       code: 200,
-      user: { email, subscription },
+      user: { email, avatarURL, subscription },
     });
   } catch (error) {
     next(error);
@@ -109,16 +105,41 @@ const updateSubscription = async (req, res, next) => {
         .status(404)
         .json({ status: 'error', code: 404, message: 'Not found.' });
     }
-    const { email, subscription } = updatedSubscription;
+    const { email, avatarURL, subscription } = updatedSubscription;
     return res.json({
       status: 'success',
       code: 200,
       message: 'Contact updated.',
-      payload: { email, subscription },
+      payload: { email, avatarURL, subscription },
     });
   } catch (error) {
     next(error);
   }
 };
 
-module.exports = { signup, login, logout, current, updateSubscription };
+const avatars = async (req, res, next) => {
+  try {
+    const id = req.user.id;
+    const uploads = new UploadAvatarService("avatars");
+    const avatarUrl = await uploads.saveAvatar({ file: req.file });
+
+    try {
+      await fs.unlink(path.join("public", req.user.avatarURL));
+    } catch (error) {
+      console.log(error.message);
+    }
+
+    await Users.updateAvatar(id, avatarUrl);
+
+    return res.json({
+      status: 'success',
+      code: 200,
+      message: "Avatar uploaded!",
+      data: { avatarUrl },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { signup, login, logout, current, updateSubscription, avatars };

@@ -2,7 +2,9 @@ const Contact = require('./contacts-schema');
 
 const listContacts = async (userId,query) => {
   const { sortBy, sortByDesc, favorite = null, limit = 5, offset = 0 } = query;
+
   const searchOptions = { owner: userId };
+  
   if (favorite !== null) {
     searchOptions.favorite = favorite;
   }
