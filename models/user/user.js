@@ -13,6 +13,14 @@ const findUserById = async userId => {
     return await user.save();
 };
 
+  const findUserByVerificationToken = async verificationToken => {
+    return await User.findOne({ verificationToken });
+};
+
+  const updateVerificationStatus = async (id, isVerified, verificationToken) => {
+    return await User.updateOne({ _id: id }, { isVerified, verificationToken });
+};
+
   const updateToken = async (userId, token) => {
     return await User.updateOne({ _id: userId }, { token });
   };
@@ -26,9 +34,11 @@ const findUserById = async userId => {
 };
   
   module.exports = { 
-    findUserById,
+  findUserById,
   findUserByEmail,
   createUser,
   updateToken,
   updateSubscription,
-  updateAvatar, };
+  updateAvatar,
+  findUserByVerificationToken,
+  updateVerificationStatus,  };
