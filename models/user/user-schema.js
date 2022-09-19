@@ -1,9 +1,14 @@
 const { Schema, model } = require('mongoose');
 const bcrypt = require('bcryptjs');
-// require('dotenv').config();
+const gravatar = require("gravatar");
+const { v4: uuid } = require("uuid");
 
 const userSchema = new Schema(
-    {
+  {
+        name: {
+          type: String,
+          default: "Awesome Guest",
+        },
         password: {
           type: String,
           required: [true, 'Set password for user'],
@@ -12,7 +17,13 @@ const userSchema = new Schema(
           type: String,
           required: [true, 'Email is required'],
           unique: true,
-        },
+    },
+         avatarURL: {
+      type: String,
+      default: function () {
+        return gravatar.url(this.email, { size: "250" }, true);
+      },
+    },
         subscription: {
           type: String,
           enum: ['starter', 'pro', 'business'],
@@ -21,6 +32,15 @@ const userSchema = new Schema(
          token: {
       type: String,
       default: null,
+    },
+      isVerified: {
+        type: Boolean,
+        default: false,
+    },
+      verificationToken: {
+        type: String,
+        required: [true, "Verification token is required"],
+        default: uuid(),
     },
       },
       {

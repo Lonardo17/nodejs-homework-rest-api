@@ -1,11 +1,25 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
 
-const url = process.env.MONGODB_URL || "";
-if (!url) {
+let URL = null;
+
+switch (process.env.NODE_ENV) {
+  case "test":
+    URL = process.env.MONGODB_URL_TEST || "";
+    break;
+  case "development":
+    URL = process.env.MONGODB_URL || "";
+    break;
+  default:
+    URL = process.env.MONGODB_URL || "";
+    break;
+}
+
+if (!URL) {
     throw new Error("please set db url through env variables");
-  }
-  const db = mongoose.connect(url, {
+}
+
+  const db = mongoose.connect(URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     dbName: 'db-contacts',
