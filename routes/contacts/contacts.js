@@ -7,7 +7,9 @@ const router = express.Router();
 
 const Controllers = require('./contacts-controllers');
 
-router.get('/', Controllers.listContacts).post('/', validationAddedContact, Controllers.addContact);
+router
+  .get('/', Controllers.listContacts)
+  .post('/', validationAddedContact, Controllers.addContact);
 
 router
   .get('/:contactId', validateMongoId, Controllers.getContactById)

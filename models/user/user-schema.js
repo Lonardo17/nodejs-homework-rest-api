@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose');
 const bcrypt = require('bcryptjs');
-// require('dotenv').config();
+const gravatar = require("gravatar");
 
 const userSchema = new Schema(
     {
@@ -12,7 +12,13 @@ const userSchema = new Schema(
           type: String,
           required: [true, 'Email is required'],
           unique: true,
-        },
+    },
+         avatarURL: {
+      type: String,
+      default: function () {
+        return gravatar.url(this.email, { size: "250" }, true);
+      },
+    },
         subscription: {
           type: String,
           enum: ['starter', 'pro', 'business'],
