@@ -11,5 +11,6 @@ router.post('/logout', tokenCheck, Controllers.logout);
 router.get('/current', tokenCheck, Controllers.current);
 router.patch('/', tokenCheck, validationSubscription, Controllers.updateSubscription);
 router.patch('/avatars', tokenCheck, upload.single("avatar"), Controllers.avatars);
-
+router.get('/verify/:verificationToken', Controllers.verifyUser);
+router.post('/verify', Controllers.repeatVerifyUser);
 module.exports = router;
